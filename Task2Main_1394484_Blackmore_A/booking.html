@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking - Rolsa Technologies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    /* Eco-friendly styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--linen); /* Light beige background */
+      color: var(--outer-space); /* Dark grey text */
+    }
+
+    .navbar {
+      background-color: var(--outer-space); /* Green navbar */
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    .navbar-brand {
+      font-family: 'Lora', serif;
+      font-weight: bold;
+      font-size: 1.8rem;
+    }
+
+    .booking-container {
+      padding: 40px 20px;
+    }
+
+    .booking-container h1 {
+      color: var(--mint); /* Green heading */
+      font-family: 'Lora', serif;
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    }
+
+    .card h2 {
+      color: var(--mint); /* Green headings inside cards */
+      font-family: 'Lora', serif;
+    }
+
+    .btn-primary {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--mint); /* Green buttons */
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #63c89a; /* Slightly lighter green on hover */
+    }
+
+    footer {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--outer-space);
+      color: var(--text-light);
+      padding: 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: var(--mint);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2f4f4f;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" style="font-family: 'Lora', serif; font-weight: bold; font-size: 1.8rem;">Rolsa Technologies</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto" id="nav-links">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="reduction-info.html">Info</a></li>
+          <li class="nav-item"><a class="nav-link active" href="booking.html">Booking</a></li>
+          <li class="nav-item"><a class="nav-link" href="market.html">Market</a></li>
+          <li class="nav-item" id="login-link"><a class="nav-link" href="login.html">Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    // Function to check if a cookie exists
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // Check if the user is logged in
+    const isLoggedIn = getCookie('user_logged_in') === 'true';
+
+    // Modify the navigation bar based on login status
+    const navLinks = document.getElementById('nav-links');
+    const loginLink = document.getElementById('login-link');
+
+    if (isLoggedIn) {
+      // Remove the "Login" link
+      loginLink.remove();
+
+      // Add "Dashboard" and "Logout" links
+      const dashboardLink = document.createElement('li');
+      dashboardLink.className = 'nav-item';
+      dashboardLink.innerHTML = '<a class="nav-link" href="php/dashboard.php">Dashboard</a>';
+      navLinks.appendChild(dashboardLink);
+
+      const logoutLink = document.createElement('li');
+      logoutLink.className = 'nav-item';
+      logoutLink.innerHTML = '<a class="nav-link" href="php/logout.php">Logout</a>';
+      navLinks.appendChild(logoutLink);
+    }
+
+    // Check for error messages in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMessage = urlParams.get('error');
+
+    if (errorMessage) {
+      // Create an alert element
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-danger text-center';
+      alertDiv.textContent = decodeURIComponent(errorMessage);
+
+      // Insert the alert at the top of the booking container
+      const bookingContainer = document.querySelector('.booking-container');
+      bookingContainer.insertAdjacentElement('beforebegin', alertDiv);
+    }
+
+    // Client-Side Validation for Required Fields
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', event => {
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+          if (!field.value.trim()) {
+            isValid = false;
+            field.classList.add('is-invalid');
+          } else {
+            field.classList.remove('is-invalid');
+          }
+        });
+
+        if (!isValid) {
+          event.preventDefault();
+          alert('Please fill in all required fields.');
+        }
+      });
+    });
+  </script>
+
+  <!-- Booking Section -->
+  <div class="booking-container">
+    <h1>What would you like to book?</h1>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <!-- Booking Form -->
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2>Consultation</h2>
+            <form action="php/booking.php" method="POST">
+              <div class="mb-3">
+                <label for="consultation_name" class="form-label">Booking Name:</label>
+                <input type="text" class="form-control" id="consultation_first_name" name="first_name" placeholder="First" required>
+                <input type="text" class="form-control mt-2" id="last_name" name="last_name" placeholder="Last" required>
+              </div>
+              <div class="mb-3">
+                <label for="consultation_address" class="form-label">Address:</label>
+                <input type="text" class="form-control" id="address_line1" name="address_line1" placeholder="Address Line 1" required>
+                <input type="text" class="form-control mt-2" id="address_line2" name="address_line2" placeholder="Address Line 2">
+              </div>
+              <div class="mb-3">
+                <label for="consultation_date" class="form-label">Date:</label>
+                <input type="date" class="form-control" id="consultation_date" name="date" required>
+              </div>
+              <input type="hidden" name="type" value="consultation">
+              <button type="submit" class="btn btn-primary">Book Consultation</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2>Installation</h2>
+            <form action="php/booking.php" method="POST">
+              <div class="mb-3">
+                <label for="installation_name" class="form-label">Booking Name:</label>
+                <input type="text" class="form-control" id="installation_first_name" name="first_name" placeholder="First" required>
+                <input type="text" class="form-control mt-2" id="last_name" name="last_name" placeholder="Last" required>
+              </div>
+              <div class="mb-3">
+                <label for="installation_address" class="form-label">Address:</label>
+                <input type="text" class="form-control" id="address_line1" name="address_line1" placeholder="Address Line 1" required>
+                <input type="text" class="form-control mt-2" id="address_line2" name="address_line2" placeholder="Address Line 2">
+              </div>
+              <div class="mb-3">
+                <label for="installation_date" class="form-label">Date:</label>
+                <input type="date" class="form-control" id="installation_date" name="date" required>
+              </div>
+              <input type="hidden" name="type" value="installation">
+              <button type="submit" class="btn btn-primary">Book Installation</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Rolsa Technologies. All rights reserved.</p>
+    <a href="privacy-policy.html">Privacy Policy</a> | 
+    <a href="terms.html">Terms of Service</a>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
